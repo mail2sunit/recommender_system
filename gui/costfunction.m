@@ -1,0 +1,9 @@
+function [J, grad] = costfunction(params, Y, R, num_users, num_restaurants,num_features,lambda)
+X = reshape(params(1:num_restaurants*num_features),num_restaurants, num_features);
+Theta = reshape(params(num_restaurants*num_features+1:end),num_users, num_features);
+h = X*Theta';
+error = (h-Y).^2;
+J = 0.5 * (sum(sum(error.*R))) + lambda*(sum(sum(Theta.^2))) + lambda*sum(sum(X.^2));
+Theta_grad = ((h-Y).*R)' * X + lambda*Theta;
+X_grad = ((h-Y).*R)*Theta + lambda*X;
+grad = [X_grad(:); Theta_grad(:)];
